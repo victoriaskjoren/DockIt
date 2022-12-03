@@ -1,135 +1,144 @@
-import {StyleSheet, Text, View, Dimensions, Button, ScrollView, Pressable, onPress, TextInput} from "react-native";
+import {StyleSheet, Text, View, Dimensions, Button, ScrollView, Pressable, TextInput,onPress} from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import React, {useState} from "react";
-import {RentOutMap} from './RentOutMap'
-import { RentingPage } from "./RentingPage";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Slider from "@react-native-community/slider";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 
-function ExplorePage() {
+export const RentingPage = () => {
     //lager en konstant setActiveMap som har som standard "renting"
-    const [activeMap, setActiveMap] = useState("RENTING")
     const [boatSize, setBoatSize] = useState(30);
+    const [time, setTime] = useState(1);
     const [mapType, setMapType] = useState("standard");
 
 
-    const onPress = () => {
-        // Check that all the data has been input
-        // if(!boatSize) display error
-        //....
-        // if(!mapPin) display error
-        // Save parking lot to the database
-        // saveToDB({boatSize, dockName, dockNumber, mapPin})
-      };
-
     return (
-<SafeAreaView>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainerStyle}>
+    <View>
+
+    <View style={{ paddingHorizontal: 30 }}>
+    <Text style={{ fontSize: 20, marginBottom: 40, paddingTop:40 }}>
+     Find a boat parking spot
+    </Text>
+    <View style={{ marginBottom: 30 }}>
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <Text style={{ marginRight: 8 }}>Boat size in foot:</Text>
+        <Text>{`${boatSize}`}</Text>
+      </View>
+
+      <Slider
+        style={{ width: "auto", height: 40 }}
+        minimumValue={10}
+        maximumValue={50}
+        minimumTrackTintColor="#333"
+        maximumTrackTintColor="#ddd"
+        value={boatSize}
+        onValueChange={setBoatSize}
+        step={1}
+      />
 
 
-      <View
-      
-          style={{
-            overflow: "hidden",
-            borderRadius: 6,
-            flexDirection: "row",
-            position: "absolute",
-            left: 20,
-          marginBottom: 50,
-          paddingTop: 10,
-
-          }}
-        >
-          <Pressable
-          // Dersom activeMap er satt til renting vil fargen være hvit, dersom man trykker vil den siden gå til RENTING siden
-            style={{
-              backgroundColor: activeMap === "RENTING" ? "#333" : "white",
-            }}
-            onPress={() => setActiveMap("RENTING")}
-          >
+    </View>
+    
+    <View>
+        
+        </View>           
+    
+    <View>
+            <MapView
+              initialRegion={{
+                latitude: 59.911491,
+                longitude: 10.757933,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+              provider={PROVIDER_GOOGLE}
+              mapType={mapType}
+              style={{ height: 400, marginVertical: 30 }}
+            >
+            </MapView>
             <View
               style={{
-                paddingVertical: 8,
-                paddingHorizontal: 16,
+                overflow: "hidden",
+                borderRadius: 6,
+                flexDirection: "row",
+                position: "absolute",
+                top: 40,
+                right: 10,
               }}
             >
-              <Text
+              <Pressable
                 style={{
-                    // styler teksten
-                  color: activeMap === "RENTING" ? "white" : "#333",
-                  fontWeight: activeMap === "RENTING" ? "bold" : "normal",
+                  backgroundColor: mapType === "standard" ? "#333" : "white",
                 }}
+                onPress={() => setMapType("standard")}
               >
-                RENTING
-              </Text>
+                <View
+                  style={{
+                    paddingVertical: 8,
+                    paddingHorizontal: 16,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: mapType === "standard" ? "white" : "#333",
+                      fontWeight: mapType === "standard" ? "bold" : "normal",
+                    }}
+                  >
+                    Default
+                  </Text>
+                </View>
+              </Pressable>
+              <Pressable
+                style={{
+                  backgroundColor: mapType === "satellite" ? "#333" : "white",
+                }}
+                onPress={() => setMapType("satellite")}
+              >
+                <View
+                  style={{
+                    paddingVertical: 8,
+                    paddingHorizontal: 16,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: mapType === "satellite" ? "white" : "#333",
+                      fontWeight: mapType === "satellite" ? "bold" : "normal",
+                    }}
+                  >
+                    Satellite
+                  </Text>
+                </View>
+              </Pressable>
             </View>
-          </Pressable>
+          </View>
           <Pressable
+            onPress={onPress}
+            title="Search"
             style={{
-              backgroundColor: activeMap === "RENTING_OUT" ? "#333" : "white",
+              backgroundColor: "#333",
+              borderRadius: 6,
+              marginVertical: 30,
+              paddingHorizontal: 16,
+              paddingVertical: 12,
             }}
-
-            // når man trykker vil siden endres til RENTING_OUT siden
-            onPress={() => setActiveMap("RENTING_OUT")}
           >
-            <View
+            <Text
               style={{
-                paddingVertical: 8,
-                paddingHorizontal: 16,
-
+                color: "white",
+                textAlign: "center",
+                fontWeight: "bold",
+                fontSize: 20,
+                textTransform: "uppercase",
               }}
             >
-              <Text
-                style={{
-                    //styler teksten
-                  color: activeMap === "RENTING_OUT" ? "white" : "#333",
-                  fontWeight: activeMap === "RENTING_OUT" ? "bold" : "normal",
-                }}
-              >
-                RENTING OUT
-              </Text>
-            </View>
+              Search
+            </Text>
           </Pressable>
-        </View>
-
-       
-        
-        {activeMap === "RENTING" &&
-        <RentingPage />
-}
-        
-        
-        {activeMap === "RENTING_OUT" &&
-        //Dersom activeMap == RENTING_OUT vil koden på RentOutMap kjøre
-        <RentOutMap />
-        }
-      </ScrollView>
-      </SafeAreaView>
+    </View>
+    
+    
+                
+            </View>
     );
-    }
-
-
-
-export default ExplorePage
-
-//Lokal styling 
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: 'white',
-        flexGrow:1
-    },
-    contentContainerStyle: {
-        backgroundColor: 'white',
-        flexGrow: 1,
-        paddingVertical: 30
-    },
-    text: {
-        fontSize: 20,
-    },
-    map: {
-        width: Dimensions.get('window').width,
-        height:"100%"
-      },
-});
-
+};

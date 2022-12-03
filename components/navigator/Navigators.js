@@ -1,12 +1,10 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Login from "../authentication/Login";
 import SignUp from "../authentication/SignUp";
 import HomeScreen from "../ProfileViews/HomeScreen";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import EntranceScreen from "../ProfileViews/CameraAndMaps/EntranceScreen";
-import MapsScreen from "../ProfileViews/CameraAndMaps/MapsScreen";
+import MapsScreen from "../Map/MapsScreen";
 
 //Instantiering af; to stacknavigator instanser og én bottomtabnavigator
 const StackAuthentication = createStackNavigator();
@@ -43,10 +41,8 @@ function EntranceStack() {
             }}>
             <StackEntrance.Screen
                 name="entrance"
-                component={EntranceScreen} />
-            <StackEntrance.Screen
-                name="maps"
                 component={MapsScreen} />
+
         </StackEntrance.Navigator>
     );
 }
